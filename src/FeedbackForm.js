@@ -9,7 +9,7 @@ function FeedbackForm({ defaultCategory = '' }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    feedbackText: '',
+    message: '',
     category: defaultCategory || '',
     anonymous: false,
     file: null,
@@ -200,7 +200,7 @@ function FeedbackForm({ defaultCategory = '' }) {
             </select>
 
             <textarea
-              name="feedbackText"
+              name="message"
               placeholder="Your Feedback"
               value={formData.feedbackText}
               onChange={handleChange}
