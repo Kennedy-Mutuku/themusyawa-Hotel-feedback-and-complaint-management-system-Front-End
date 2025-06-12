@@ -190,12 +190,13 @@ function FeedbackForm({ defaultCategory = '' }) {
               <option value="">Select Category</option>
               {categoryOptions.map((cat) => (
                 <option
-                  key={cat}
-                  value={cat}
-                  style={{ color: cat === 'Report Corruption' ? '#d32f2f' : 'inherit' }}
-                >
-                  {cat}
-                </option>
+                key="Corruption"
+                value="Corruption"
+                style={{ color: '#d32f2f' }}
+              >
+                Report Corruption
+              </option>
+              
               ))}
             </select>
 
