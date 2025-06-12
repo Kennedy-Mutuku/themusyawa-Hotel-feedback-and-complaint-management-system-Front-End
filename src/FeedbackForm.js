@@ -1,212 +1,246 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { API_BASE_URL } from './config';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-function FeedbackForm({ defaultCategory = '' }) {
+function FeedbackForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    feedbackText: '',
-    category: defaultCategory || '',
-    anonymous: false,
+    phone: '',
+    category: '',
+    message: '',
     file: null,
   });
+
+  const [btnHover, setBtnHover] = useState(false);
+  const [reportHover, setReportHover] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const feedbackRef = useRef();
-  const nameInputRef = useRef();
-  const fileInputRef = useRef();
 
-  const categoryOptions = [
-    'Compliment',
-    'Complaint',
-    'Suggestion',
-    'Inquiry',
-    'Other',
-    'Report Corruption',
-  ];
-
-  useEffect(() => {
-    if (defaultCategory) {
-      setFormData(prev => ({ ...prev, category: defaultCategory }));
-    }
-  }, [defaultCategory]);
-
-  const handleChange = e => {
-    const { name, value, checked, files } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]:
-        name === 'anonymous' ? checked :
-        name === 'file' ? files[0] :
-        value,
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'file' ? files[0] : value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.category) return toast.error('Please select a feedback category.');
-    if (!formData.feedbackText?.trim()) return toast.error('Please enter your feedback.');
-    if (!formData.anonymous && (!formData.name.trim() || !formData.email.trim())) {
-      return toast.error('Please provide your name and email, or choose to submit anonymously.');
+    setIsSubmitting(true);
+    const data = new FormData();
+
+    for (const key in formData) {
+      data.append(key, formData[key]);
     }
 
     try {
-      setIsSubmitting(true);
-      const data = new FormData();
-      data.append('name', formData.name);
-      data.append('email', formData.email);
-      data.append('feedbackText', formData.feedbackText);
-      data.append('category', formData.category);
-      data.append('anonymous', formData.anonymous);
-      if (formData.file) data.append('file', formData.file);
-
-      await axios.post(`${API_BASE_URL}/api/feedback`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      toast.success('✅ Feedback submitted successfully!');
-      setFormData({
-        name: '',
-        email: '',
-        feedbackText: '',
-        category: defaultCategory || '',
-        anonymous: false,
-        file: null,
-      });
-      fileInputRef.current.value = '';
-      nameInputRef.current.focus();
-    } catch {
-      toast.error('❌ Failed to submit feedback.');
+      const response = await axios.post('https://your-backend-api.com/feedback', data);
+      alert('✅ Feedback submitted successfully!');
+      console.log('Server response:', response.data);
+      setFormData({ name: '', email: '', phone: '', category: '', message: '', file: null });
+    } catch (error) {
+      alert('❌ Submission failed. Try again.');
+      console.error('Error submitting feedback:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleReportClick = () => {
-    setFormData(prev => ({ ...prev, category: 'Report Corruption', anonymous: false }));
-    setTimeout(() => feedbackRef.current?.focus(), 200);
+    alert('🚨 Corruption report process initiated.');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 to-red-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white/90 rounded-xl shadow-xl p-6">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-red-700 uppercase mb-2">
-          MACHAKOS LEVEL 5 HOSPITAL
-        </h1>
-        <h2 className="text-lg text-center text-red-700 font-semibold mb-6">
-          Feedback and Complaint Management System
-        </h2>
+    <div>
+      <style>
+        {`
+        .form-container {
+          max-width: 600px;
+          margin: auto;
+          padding: 2rem;
+          background: #fff;
+          border-radius: 15px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          {!formData.anonymous && (
-            <>
-              <input
-                ref={nameInputRef}
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-            </>
-          )}
+        input, select, textarea {
+          font-size: 1.05rem;
+          padding: 0.75rem 1.25rem;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          width: 100%;
+        }
 
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-          >
-            <option value="">Select Category</option>
-            {categoryOptions.map(cat => (
-              <option key={cat} value={cat} className={cat === 'Report Corruption' ? 'text-red-700 font-bold' : ''}>
-                {cat}
-              </option>
-            ))}
-          </select>
+        label {
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+        }
 
-          <textarea
-            name="feedbackText"
-            placeholder="Your Feedback"
-            value={formData.feedbackText}
-            onChange={handleChange}
-            rows="4"
-            required
-            ref={feedbackRef}
-            className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 resize-y focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
+        h1 {
+          font-size: 2.5rem;
+          text-align: center;
+          margin-bottom: 1rem;
+        }
 
-          <label className="flex items-center gap-2 text-sm font-medium">
-            <input
-              type="checkbox"
-              name="anonymous"
-              checked={formData.anonymous}
-              onChange={handleChange}
-              className="accent-red-600"
-            />
-            Submit anonymously (optional)
-          </label>
+        h2 {
+          font-size: 1.2rem;
+          text-align: center;
+          margin-bottom: 2rem;
+          color: #555;
+        }
 
-          <label
-            htmlFor="file-upload"
-            className="block border-2 border-dashed border-gray-300 rounded-lg px-4 py-2 text-center cursor-pointer hover:border-red-500 text-sm"
-          >
-            {formData.file ? formData.file.name : 'Attach a file (optional)'}
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            name="file"
-            onChange={handleChange}
-            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt"
-            className="hidden"
-            ref={fileInputRef}
-          />
+        .buttons-wrapper {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 1rem;
+        }
 
-          <div className="flex flex-col sm:flex-row justify-between gap-3 pt-2">
-            <button
-              type="button"
-              onClick={handleReportClick}
-              className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-bold shadow"
-            >
-              🚨 Report Corruption
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md font-bold shadow disabled:opacity-60"
-            >
-              {isSubmitting ? '⏳ Submitting...' : '🚀 Submit'}
-            </button>
-          </div>
-        </form>
+        .submit-btn, .report-btn {
+          padding: 0.7rem 1.5rem;
+          font-size: 1.1rem;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
 
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          pauseOnHover
-          draggable
-          toastStyle={{ borderRadius: '10px', backgroundColor: '#d32f2f', color: 'white', fontWeight: 'bold' }}
-          progressStyle={{ background: '#ff6a00', borderRadius: '10px' }}
+        .report-btn {
+          background-color: #ff3b3b;
+        }
+
+        .submit-btn {
+          background-color: #d32f2f;
+        }
+
+        @media (max-width: 600px) {
+          .form-container {
+            padding: 1rem;
+            margin: 1rem;
+          }
+
+          input, select, textarea {
+            font-size: 1rem !important;
+            padding: 0.6rem 1rem !important;
+          }
+
+          .buttons-wrapper {
+            flex-direction: column;
+            gap: 0.8rem;
+          }
+
+          .submit-btn, .report-btn {
+            width: 100%;
+            font-size: 1.05rem !important;
+            padding: 0.65rem 1.2rem !important;
+          }
+
+          h1 {
+            font-size: 2.2rem !important;
+          }
+
+          h2 {
+            font-size: 1rem !important;
+          }
+        }
+        `}
+      </style>
+
+      <form onSubmit={handleSubmit} className="form-container" noValidate>
+        <h1>📢 Submit Your Feedback</h1>
+        <h2>We value your input and aim to serve you better!</h2>
+
+        <label htmlFor="name">Name</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
         />
-      </div>
+
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          placeholder="example@domain.com"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="phone">Phone</label>
+        <input
+          type="tel"
+          name="phone"
+          placeholder="07XXXXXXXX"
+          value={formData.phone}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="category">Category</label>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          required
+        >
+          <option value="">-- Select Category --</option>
+          <option value="Service Delivery">Service Delivery</option>
+          <option value="Corruption">Corruption</option>
+          <option value="Staff Conduct">Staff Conduct</option>
+          <option value="Facility Hygiene">Facility Hygiene</option>
+          <option value="Billing Issues">Billing Issues</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label htmlFor="message">Message</label>
+        <textarea
+          name="message"
+          rows="4"
+          placeholder="Write your message here..."
+          value={formData.message}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="file">Attach Screenshot (optional)</label>
+        <input
+          type="file"
+          name="file"
+          accept="image/*,application/pdf"
+          onChange={handleChange}
+        />
+
+        <div className="buttons-wrapper">
+          <button
+            type="button"
+            onClick={handleReportClick}
+            className="report-btn"
+            onMouseEnter={() => setReportHover(true)}
+            onMouseLeave={() => setReportHover(false)}
+            style={{
+              backgroundColor: reportHover ? '#d32f2f' : '#ff3b3b',
+            }}
+          >
+            🚨 Report Corruption
+          </button>
+
+          <button
+            type="submit"
+            className="submit-btn"
+            onMouseEnter={() => setBtnHover(true)}
+            onMouseLeave={() => setBtnHover(false)}
+            style={{
+              backgroundColor: btnHover ? '#ff6a00' : '#d32f2f',
+              opacity: isSubmitting ? 0.6 : 1,
+            }}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? '⏳ Submitting...' : '🚀 Submit'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
