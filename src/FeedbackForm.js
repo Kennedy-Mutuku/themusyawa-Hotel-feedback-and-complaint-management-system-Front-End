@@ -200,15 +200,16 @@ function FeedbackForm({ defaultCategory = '' }) {
             </select>
 
             <textarea
-              name="message"
-              placeholder="Your Feedback"
-              value={formData.feedbackText}
-              onChange={handleChange}
-              rows="4"
-              required
-              ref={feedbackRef}
-              style={textareaStyle}
-            />
+  name="feedbackText"
+  placeholder="Your Feedback"
+  value={formData.feedbackText}
+  onChange={handleChange}
+  rows="4"
+  required
+  ref={feedbackRef}
+  style={textareaStyle}
+/>
+
 
             <label style={checkboxLabelStyle}>
               <input
