@@ -75,12 +75,11 @@ function FeedbackForm({ defaultCategory = '' }) {
       toast.error('Please select a feedback category.');
       return;
     }
-
-    if (!formData.feedbackText.trim()) {
+    if (!(formData.feedbackText || '').trim()) {
       toast.error('Please enter your feedback.');
       return;
     }
-
+    
     if (!formData.anonymous && (!formData.name.trim() || !formData.email.trim())) {
       toast.error('Please provide your name and email, or choose to submit anonymously.');
       return;
