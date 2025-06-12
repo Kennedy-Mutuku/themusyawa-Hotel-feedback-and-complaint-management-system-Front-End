@@ -65,17 +65,26 @@ function FeedbackList() {
 
   const renderFileAttachment = (fileUrl) => {
     if (!fileUrl) return null;
-
-    const fullFileUrl = `${API_BASE_URL}/${fileUrl.replace(/^\/+/, '')}`;
+  
+    // Ensure the URL is absolute
+    const fullFileUrl = fileUrl.startsWith('http')
+      ? fileUrl
+      : `${API_BASE_URL.replace(/\/+$/, '')}/${fileUrl.replace(/^\/+/, '')}`;
+  
     const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fullFileUrl);
-
+  
     return (
       <div style={fileContainerStyle}>
         {isImage ? (
           <img
             src={fullFileUrl}
             alt="attachment"
-            style={{ maxWidth: '100%', maxHeight: 200, borderRadius: 10, marginBottom: 10 }}
+            style={{
+              maxWidth: '100%',
+              maxHeight: 200,
+              borderRadius: 10,
+              marginBottom: 10,
+            }}
             onError={(e) => {
               e.target.style.display = 'none';
             }}
@@ -85,7 +94,12 @@ function FeedbackList() {
             href={fullFileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: '1rem', color: '#007bff', textDecoration: 'underline', fontWeight: '600' }}
+            style={{
+              fontSize: '1rem',
+              color: '#007bff',
+              textDecoration: 'underline',
+              fontWeight: '600',
+            }}
           >
             📎 View Attached File
           </a>
@@ -93,7 +107,7 @@ function FeedbackList() {
       </div>
     );
   };
-
+  
   if (loading) return <p style={loadingStyle}>Loading feedback...</p>;
   if (error) return <p style={errorStyle}>{error}</p>;
 
@@ -229,6 +243,7 @@ const infoStyle = {
 };
 
 const fileContainerStyle = {
+  marginTop: 10,
   marginBottom: 12,
 };
 
