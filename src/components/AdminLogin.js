@@ -12,14 +12,14 @@ function AdminLogin() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
+  
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', {
+      const response = await fetch('https://the-musyawa-hotell-feedback-and.onrender.com/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('adminToken', data.token);
@@ -31,13 +31,14 @@ function AdminLogin() {
         setError(message);
         toast.error(message);
       }
-    } catch {
+    } catch (error) {
       setError('Network error');
       toast.error('Network error');
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white shadow rounded">
