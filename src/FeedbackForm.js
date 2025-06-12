@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from './config';
-
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState, useRef } from 'react';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function FeedbackForm({ defaultCategory = '' }) {
+const FeedbackForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: '',
-    category: defaultCategory || '',
+    category: '',
+    feedbackText: '',
     anonymous: false,
     file: null,
   });
@@ -19,136 +16,53 @@ function FeedbackForm({ defaultCategory = '' }) {
   const [btnHover, setBtnHover] = useState(false);
   const [reportHover, setReportHover] = useState(false);
 
-  const feedbackRef = useRef(null);
   const nameInputRef = useRef(null);
+  const feedbackRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const categoryOptions = [
-    'Compliment',
-    'Complaint',
-    'Suggestion',
-    'Inquiry',
-    'Other',
+    'General Feedback',
+    'Medical Services',
+    'Facility Cleanliness',
+    'Staff Conduct',
+    'Billing & Payments',
+    'Suggestions',
     'Report Corruption',
   ];
 
-  useEffect(() => {
-    if (defaultCategory) {
-      setFormData((prev) => ({ ...prev, category: defaultCategory }));
-    }
-  }, [defaultCategory]);
-
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-  
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]:
-        type === 'checkbox'
-          ? checked
-          : type === 'file'
-          ? files[0]
-          : value,
-    }));
-  };
-  
-
-    if (name === 'anonymous') {
-      setFormData((prev) => ({ ...prev, anonymous: checked }));
-      return;
+    if (type === 'checkbox') {
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else if (type === 'file') {
+      setFormData((prev) => ({ ...prev, file: files[0] }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
-
-    if (name === 'category') {
-      setFormData((prev) => ({
-        ...prev,
-        category: value,
-      }));
-      return;
-    }
-
-    if (name === 'file') {
-      setFormData((prev) => ({
-        ...prev,
-        file: files[0],
-      }));
-      return;
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    if (!formData.category) {
-      toast.error('Please select a feedback category.');
-      return;
-    }
-    if (!formData.feedbackText?.trim()) {
-      toast.error('Please enter your feedback.');
-      return;
-    }
-    
-    
-    
-    if (!formData.anonymous && (!formData.name.trim() || !formData.email.trim())) {
-      toast.error('Please provide your name and email, or choose to submit anonymously.');
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      const data = new FormData();
-      data.append('name', formData.name);
-      data.append('email', formData.email);
-      data.append('feedbackText', formData.feedbackText);
-      data.append('category', formData.category);
-      data.append('anonymous', formData.anonymous);
-      if (formData.file) {
-        data.append('file', formData.file);
-      }
-
-      await axios.post(`${API_BASE_URL}/api/feedback`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      toast.success('✅ Feedback submitted successfully!');
-
+    // Simulate form submission (you can hook this to your backend)
+    setTimeout(() => {
+      setIsSubmitting(false);
+      alert('Feedback submitted successfully!');
       setFormData({
         name: '',
         email: '',
+        category: '',
         feedbackText: '',
-        category: defaultCategory || '',
         anonymous: false,
         file: null,
       });
-
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      if (nameInputRef.current) nameInputRef.current.focus();
-    } catch (error) {
-      console.error(error);
-      toast.error('❌ Failed to submit feedback.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    }, 2000);
   };
 
   const handleReportClick = () => {
-    setFormData((prev) => ({
-      ...prev,
-      category: 'Report Corruption',
-      anonymous: false,
-    }));
-
-    setTimeout(() => {
-      if (feedbackRef.current) {
-        feedbackRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        feedbackRef.current.focus();
-      }
-    }, 200);
+    setFormData((prev) => ({ ...prev, category: 'Report Corruption' }));
+    feedbackRef.current?.focus();
   };
 
   return (
@@ -196,8 +110,10 @@ function FeedbackForm({ defaultCategory = '' }) {
               required
               style={{
                 ...selectStyle,
-                color: formData.category === 'Report Corruption' ? '#d32f2f' : '#333',
-                fontWeight: formData.category === 'Report Corruption' ? '700' : '600',
+                color:
+                  formData.category === 'Report Corruption' ? '#d32f2f' : '#333',
+                fontWeight:
+                  formData.category === 'Report Corruption' ? '700' : '600',
               }}
             >
               <option value="">Select Category</option>
@@ -205,7 +121,9 @@ function FeedbackForm({ defaultCategory = '' }) {
                 <option
                   key={cat}
                   value={cat}
-                  style={{ color: cat === 'Report Corruption' ? '#d32f2f' : 'inherit' }}
+                  style={{
+                    color: cat === 'Report Corruption' ? '#d32f2f' : 'inherit',
+                  }}
                 >
                   {cat}
                 </option>
@@ -213,16 +131,15 @@ function FeedbackForm({ defaultCategory = '' }) {
             </select>
 
             <textarea
-  name="feedbackText"
-  placeholder="Your Feedback"
-  value={formData.feedbackText}
-  onChange={handleChange}
-  rows="4"
-  required
-  ref={feedbackRef}
-  style={textareaStyle}
-/>
-
+              name="feedbackText"
+              placeholder="Your Feedback"
+              value={formData.feedbackText}
+              onChange={handleChange}
+              rows="4"
+              required
+              ref={feedbackRef}
+              style={textareaStyle}
+            />
 
             <label style={checkboxLabelStyle}>
               <input
@@ -239,16 +156,15 @@ function FeedbackForm({ defaultCategory = '' }) {
               {formData.file ? formData.file.name : 'Attach a file (optional)'}
             </label>
             <input
-  id="file-upload"
-  type="file"
-  name="file"
-  onChange={handleChange}
-  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt"
-  autoComplete="off" // ✅ Prevents browser autofill warnings
-  style={{ display: 'none' }}
-  ref={fileInputRef}
-/>
-
+              id="file-upload"
+              type="file"
+              name="file"
+              onChange={handleChange}
+              accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt"
+              autoComplete="off"
+              style={{ display: 'none' }}
+              ref={fileInputRef}
+            />
 
             <div style={buttonsWrapperStyle}>
               <button
@@ -293,7 +209,6 @@ function FeedbackForm({ defaultCategory = '' }) {
           />
         </div>
 
-        {/* Inline styles for animation and placeholders */}
         <style>{`
           .animated-subtitle {
             background: linear-gradient(90deg, #d32f2f, #ff6a00, #d32f2f);
@@ -312,15 +227,10 @@ function FeedbackForm({ defaultCategory = '' }) {
           }
 
           @keyframes gradient-slide {
-            0% {
-              background-position: 0% center;
-            }
-            100% {
-              background-position: 200% center;
-            }
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
           }
 
-          /* Placeholder styles */
           input::placeholder,
           select::placeholder,
           textarea::placeholder {
@@ -348,7 +258,7 @@ function FeedbackForm({ defaultCategory = '' }) {
       </div>
     </>
   );
-}
+};
 
 // ---- STYLES ----
 
@@ -369,7 +279,7 @@ const containerStyle = {
   backgroundColor: 'rgba(255, 255, 255, 0.95)',
   borderRadius: 16,
   boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
-  backdropFilter: 'blur(12px)', // frosted glass effect
+  backdropFilter: 'blur(12px)',
   border: '1px solid rgba(255, 255, 255, 0.3)',
   position: 'relative',
   zIndex: 1,
@@ -380,7 +290,7 @@ const titleStyle = {
   fontWeight: '900',
   textAlign: 'center',
   color: '#d32f2f',
-  marginBottom: '0.1rem', // Reduced from '0.25rem'
+  marginBottom: '0.1rem',
   textTransform: 'uppercase',
   letterSpacing: '0.15em',
   textShadow: `
@@ -394,7 +304,6 @@ const titleStyle = {
   cursor: 'default',
   lineHeight: 1.1,
 };
-
 
 const subTitleStyle = {
   fontSize: '1.2rem',
