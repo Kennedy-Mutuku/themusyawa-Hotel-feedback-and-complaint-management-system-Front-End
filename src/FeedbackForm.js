@@ -39,7 +39,19 @@ function FeedbackForm({ defaultCategory = '' }) {
   }, [defaultCategory]);
 
   const handleChange = (e) => {
-    const { name, value, checked, files } = e.target;
+    const { name, value, type, checked, files } = e.target;
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]:
+        type === 'checkbox'
+          ? checked
+          : type === 'file'
+          ? files[0]
+          : value,
+    }));
+  };
+  
 
     if (name === 'anonymous') {
       setFormData((prev) => ({ ...prev, anonymous: checked }));
@@ -75,10 +87,11 @@ function FeedbackForm({ defaultCategory = '' }) {
       toast.error('Please select a feedback category.');
       return;
     }
-    if (typeof formData.feedbackText !== 'string' || formData.feedbackText.trim() === '') {
+    if (!formData.feedbackText?.trim()) {
       toast.error('Please enter your feedback.');
       return;
     }
+    
     
     
     if (!formData.anonymous && (!formData.name.trim() || !formData.email.trim())) {
