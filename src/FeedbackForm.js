@@ -225,14 +225,16 @@ function FeedbackForm({ defaultCategory = '' }) {
               {formData.file ? formData.file.name : 'Attach a file (optional)'}
             </label>
             <input
-              id="file-upload"
-              type="file"
-              name="file"
-              onChange={handleChange}
-              accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-            />
+  id="file-upload"
+  type="file"
+  name="file"
+  onChange={handleChange}
+  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt"
+  autoComplete="off" // ✅ Prevents browser autofill warnings
+  style={{ display: 'none' }}
+  ref={fileInputRef}
+/>
+
 
             <div style={buttonsWrapperStyle}>
               <button
