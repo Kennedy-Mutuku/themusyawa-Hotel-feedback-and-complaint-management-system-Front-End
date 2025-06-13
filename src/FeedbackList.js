@@ -19,7 +19,16 @@ function FeedbackList() {
   const fetchFeedbacks = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/feedback`);
-      setFeedbacks(response.data);
+  
+      // 🔥 Debug: View the raw data from backend
+      console.log('🔥 Feedbacks received:', response.data);
+  
+      // ✅ Sort by date (newest first)
+      const sortedFeedbacks = response.data.sort((a, b) => {
+        return new Date(b.submittedAt) - new Date(a.submittedAt);
+      });
+  
+      setFeedbacks(sortedFeedbacks);
     } catch (err) {
       setError('Failed to fetch feedback');
       toast.error('Failed to fetch feedback');
@@ -27,6 +36,7 @@ function FeedbackList() {
       setLoading(false);
     }
   };
+  
 
   const applyFilters = useCallback(() => {
     let result = [...feedbacks];
