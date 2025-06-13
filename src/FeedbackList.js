@@ -139,24 +139,34 @@ function FeedbackList() {
       </div>
 
       {filteredFeedbacks.length === 0 ? (
-        <p style={emptyStyle}>No matching feedback found.</p>
-      ) : (
-        <ul style={listStyle}>
-          {filteredFeedbacks.map(({ _id, name, email, category, message, feedbackText, date, anonymous, fileUrl }) => (
-            <li key={_id} style={itemStyle}>
-              <div style={categoryStyle}>{category}</div>
-              <p style={messageStyle}>"{message || feedbackText}"</p>
-              <p style={infoStyle}>
-                <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
-                <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
-                <strong>Date:</strong> {new Date(date).toLocaleString()}
-              </p>
-              {renderFileAttachment(fileUrl)}
-              <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
+  <p style={emptyStyle}>No matching feedback found.</p>
+) : (
+  <ul style={listStyle}>
+    {filteredFeedbacks.map(({ _id, name, email, category, message, feedbackText, submittedAt, anonymous, fileUrl }) => (
+      <li key={_id} style={itemStyle}>
+        <div style={categoryStyle}>{category}</div>
+        <p style={messageStyle}>"{message || feedbackText}"</p>
+        <p style={infoStyle}>
+          <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
+          <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
+          <strong>Date:</strong> {submittedAt ? new Date(submittedAt).toLocaleString() : 'N/A'}
+        </p>
+        {fileUrl && (
+          <div style={{ marginTop: '10px' }}>
+            <strong>Attachment:</strong><br />
+            <img
+              src={fileUrl}
+              alt="Uploaded file"
+              style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '6px' }}
+            />
+          </div>
+        )}
+        <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
+      </li>
+    ))}
+  </ul>
+)}
+
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
