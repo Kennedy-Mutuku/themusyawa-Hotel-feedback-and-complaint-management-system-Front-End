@@ -398,23 +398,24 @@ const subTitleStyle = {
 const formStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
-  padding: '0 0.5rem',
-  width: '100%',
+  alignItems: 'center', // Center everything horizontally
+  gap: 15,
 };
 
 const inputStyle = {
-  width: '100%',
-  padding: '0.75rem 1rem',
-  fontSize: 'clamp(0.95rem, 4vw, 1.05rem)',
+  border: '2px solid #ccc',
+  borderRadius: 8,
+  padding: '0.5rem 1rem',
+  fontSize: '0.95rem',
   fontWeight: '500',
   fontFamily: "'Poppins', Arial, sans-serif",
-  border: '2px solid #ddd',
-  borderRadius: '10px',
+  width: '100%',
+  maxWidth: '380px',      // 👈 makes inputs shorter
+  boxShadow: '0 0 4px rgba(0, 0, 0, 0.1)',
   outline: 'none',
+  transition: 'border-color 0.3s ease',
   color: '#333',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-  boxShadow: '0 0 0 rgba(0,0,0,0)',
+  cursor: 'text',
 };
 
 const selectStyle = {
@@ -424,24 +425,27 @@ const selectStyle = {
   cursor: 'pointer',
 };
 
+
+
 const textareaStyle = {
   ...inputStyle,
-  minHeight: 120,
+  minHeight: 110,
   resize: 'vertical',
   fontWeight: '600',
 };
 
 const checkboxLabelStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.6rem',
-  color: '#444',
   fontWeight: '600',
-  fontSize: 'clamp(0.85rem, 3.5vw, 1rem)',
+  fontSize: '0.9rem',
   userSelect: 'none',
   cursor: 'pointer',
-  marginTop: '0.3rem',
-  marginBottom: '0.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  color: '#444',
+  marginTop: 5,
+  marginBottom: 5,
+  maxWidth: '380px', // align checkbox content
 };
 
 const checkboxStyle = {
@@ -454,30 +458,30 @@ const checkboxStyle = {
 
 const buttonsWrapperStyle = {
   display: 'flex',
-  flexDirection: 'column',
-  gap: '0.8rem',
-  marginTop: '1rem',
-  width: '100%',
+  justifyContent: 'center',
+  gap: 15,
+  marginTop: 15,
+  flexWrap: 'wrap',
 };
 
 const buttonStyle = {
-  width: '100%',
-  padding: '0.75rem',
-  fontSize: 'clamp(1rem, 4vw, 1.1rem)',
+  cursor: 'pointer',
+  borderRadius: 9,
+  border: 'none',
+  padding: '0.6rem 1.4rem',
   fontWeight: '700',
+  fontSize: '1rem',
   color: '#fff',
   backgroundColor: '#d32f2f',
-  border: 'none',
-  borderRadius: '10px',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
   boxShadow: '0 3px 10px rgba(211, 47, 47, 0.7)',
+  transition: 'background-color 0.3s ease',
 };
 
 const reportButtonStyle = {
   ...buttonStyle,
   backgroundColor: '#ff3b3b',
-  boxShadow: '0 4px 12px rgba(255, 59, 59, 0.9)',
+  boxShadow: '0 3px 15px rgba(255, 59, 59, 0.9)',
+  fontSize: '0.95rem',
 };
 
 const toastStyle = {
@@ -494,6 +498,7 @@ const progressStyle = {
   background: '#ff6a00',
   borderRadius: '10px',
 };
+
 
 
 // Export the component
