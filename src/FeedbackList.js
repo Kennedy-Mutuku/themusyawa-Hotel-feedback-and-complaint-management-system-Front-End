@@ -20,11 +20,11 @@ function FeedbackList() {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/feedback`);
   
-      // 🔥 Debug: View the raw data from backend
+      // 🔥 Log for debugging
       console.log('🔥 Feedbacks received:', response.data);
   
-      // ✅ Sort by date (newest first)
-      const sortedFeedbacks = response.data.sort((a, b) => {
+      // ✅ Sort by submittedAt DESC (latest first)
+      const sortedFeedbacks = [...response.data].sort((a, b) => {
         return new Date(b.submittedAt) - new Date(a.submittedAt);
       });
   
@@ -36,6 +36,7 @@ function FeedbackList() {
       setLoading(false);
     }
   };
+  
   
 
   const applyFilters = useCallback(() => {
