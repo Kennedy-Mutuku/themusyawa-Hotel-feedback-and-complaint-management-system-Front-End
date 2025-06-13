@@ -19,15 +19,9 @@ function FeedbackList() {
   const fetchFeedbacks = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/feedback`);
-  
-      // 🔥 Log for debugging
-      console.log('🔥 Feedbacks received:', response.data);
-  
-      // ✅ Sort by submittedAt DESC (latest first)
       const sortedFeedbacks = [...response.data].sort((a, b) => {
         return new Date(b.submittedAt) - new Date(a.submittedAt);
       });
-  
       setFeedbacks(sortedFeedbacks);
     } catch (err) {
       setError('Failed to fetch feedback');
@@ -36,8 +30,6 @@ function FeedbackList() {
       setLoading(false);
     }
   };
-  
-  
 
   const applyFilters = useCallback(() => {
     let result = [...feedbacks];
@@ -64,7 +56,6 @@ function FeedbackList() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this feedback?')) return;
-
     try {
       await axios.delete(`${API_BASE_URL}/api/feedback/${id}`);
       setFeedbacks((prev) => prev.filter((fb) => fb._id !== id));
@@ -72,51 +63,6 @@ function FeedbackList() {
     } catch (err) {
       toast.error('Failed to delete feedback');
     }
-  };
-
-  // ✅ Moved this inside the component so it can access fileUrl safely
-  const renderFileAttachment = (fileUrl) => {
-    if (!fileUrl) return null;
-
-    const fullFileUrl = fileUrl.startsWith('http')
-      ? fileUrl
-      : `${API_BASE_URL.replace(/\/+$/, '')}/${fileUrl.replace(/^\/+/, '')}`;
-
-    const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fullFileUrl);
-
-    return (
-      <div style={fileContainerStyle}>
-        {isImage ? (
-          <img
-            src={fullFileUrl}
-            alt="attachment"
-            style={{
-              maxWidth: '100%',
-              maxHeight: 200,
-              borderRadius: 10,
-              marginBottom: 10,
-            }}
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-        ) : (
-          <a
-            href={fullFileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: '1rem',
-              color: '#007bff',
-              textDecoration: 'underline',
-              fontWeight: '600',
-            }}
-          >
-            📎 View Attached File
-          </a>
-        )}
-      </div>
-    );
   };
 
   if (loading) return <p style={loadingStyle}>Loading feedback...</p>;
@@ -153,73 +99,69 @@ function FeedbackList() {
         <p style={emptyStyle}>No matching feedback found.</p>
       ) : (
         <ul style={listStyle}>
-        {filteredFeedbacks.map(({ _id, name, email, category, message, feedbackText, submittedAt, anonymous, fileUrl }) => {
-          // ✅ Handle date safely
-          const formattedDate =
-            submittedAt && !isNaN(new Date(submittedAt))
-              ? new Date(submittedAt).toLocaleString()
-              : 'Invalid/Missing Date';
-      
-          // ✅ Handle file rendering
-          const isImage = fileUrl && /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fileUrl);
-          const fullFileUrl = fileUrl
-            ? fileUrl.startsWith('http')
-              ? fileUrl
-              : `${API_BASE_URL.replace(/\/+$/, '')}/${fileUrl.replace(/^\/+/, '')}`
-            : null;
-      
-          return (
-            <li key={_id} style={itemStyle}>
-              <div style={categoryStyle}>{category}</div>
-              <p style={messageStyle}>"{message || feedbackText}"</p>
-              <p style={infoStyle}>
-                <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
-                <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
-                <strong>Date:</strong> {formattedDate}
-              </p>
-      
-              {fileUrl && (
-                <div style={{ marginTop: '10px' }}>
-                  <strong>Attachment:</strong><br />
-                  {isImage ? (
-                    <img
-                      src={fullFileUrl}
-                      alt="attachment"
-                      style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '6px' }}
-                      onError={(e) => (e.target.style.display = 'none')}
-                    />
-                  ) : (
-                    <a
-                      href={fullFileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontSize: '1rem',
-                        color: '#007bff',
-                        textDecoration: 'underline',
-                        fontWeight: '600',
-                      }}
-                    >
-                      📎 View Attached File
-                    </a>
-                  )}
-                </div>
-              )}
-      
-              <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
-            </li>
-          );
-        })}
-      </ul>
-      
+          {filteredFeedbacks.map(({ _id, name, email, category, message, feedbackText, submittedAt, anonymous, fileUrl }) => {
+            const formattedDate =
+              submittedAt && !isNaN(new Date(submittedAt))
+                ? new Date(submittedAt).toLocaleString()
+                : 'Invalid/Missing Date';
 
+            const isImage = fileUrl && /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fileUrl);
+            const fullFileUrl = fileUrl
+              ? fileUrl.startsWith('http')
+                ? fileUrl
+                : `${API_BASE_URL.replace(/\/+$/, '')}/${fileUrl.replace(/^\/+/, '')}`
+              : null;
+
+            return (
+              <li key={_id} style={itemStyle}>
+                <div style={categoryStyle}>{category}</div>
+                <p style={messageStyle}>"{message || feedbackText}"</p>
+                <p style={infoStyle}>
+                  <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
+                  <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
+                  <strong>Date:</strong> {formattedDate}
+                </p>
+
+                {fileUrl && (
+                  <div style={{ marginTop: '10px' }}>
+                    <strong>Attachment:</strong><br />
+                    {isImage ? (
+                      <img
+                        src={fullFileUrl}
+                        alt="attachment"
+                        style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '6px' }}
+                        onError={(e) => (e.target.style.display = 'none')}
+                      />
+                    ) : (
+                      <a
+                        href={fullFileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontSize: '1rem',
+                          color: '#007bff',
+                          textDecoration: 'underline',
+                          fontWeight: '600',
+                        }}
+                      >
+                        📎 View Attached File
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
+              </li>
+            );
+          })}
+        </ul>
       )}
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
 
-// 🔧 Styling
+// Styling
 const containerStyle = {
   maxWidth: 800,
   margin: '3rem auto',
@@ -296,11 +238,6 @@ const messageStyle = {
 const infoStyle = {
   fontSize: '0.85rem',
   color: '#666',
-  marginBottom: 12,
-};
-
-const fileContainerStyle = {
-  marginTop: 10,
   marginBottom: 12,
 };
 
