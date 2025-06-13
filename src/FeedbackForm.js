@@ -335,31 +335,34 @@ function FeedbackForm({ defaultCategory = '' }) {
 
 // ---- STYLES ----
 
+// Add this block before any style declarations
 const pageBackgroundStyle = {
   minHeight: '100vh',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   background: 'radial-gradient(circle at center, #ff6a00 0%, #8b0000 80%)',
-  padding: '1rem',
+  padding: '0.5rem', // reduced to bring white box closer to edge
 };
 
+
 const containerStyle = {
-  width: '90%',
-  maxWidth: '520px',
-  margin: '2rem auto',
+  width: '95%',
+  maxWidth: '580px',
+  margin: '1.5rem auto',
   fontFamily: "'Poppins', Arial, sans-serif",
-  padding: '1.5rem',
-  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+  padding: '2rem',
+  backgroundColor: 'rgba(255, 255, 255, 0.97)',
   borderRadius: '1rem',
-  boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
+  boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)', // softer shadow
   backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)', // for Safari
-  border: '1px solid rgba(255, 255, 255, 0.3)',
+  WebkitBackdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255, 255, 255, 0.2)', // slightly thinner
   position: 'relative',
   zIndex: 1,
   boxSizing: 'border-box',
 };
+
 
 
 const titleStyle = {
