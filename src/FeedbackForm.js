@@ -346,27 +346,31 @@ const pageBackgroundStyle = {
 };
 
 const containerStyle = {
-  maxWidth: 520,
-  margin: '3rem auto',
+  width: '90%',
+  maxWidth: '520px',
+  margin: '2rem auto',
   fontFamily: "'Poppins', Arial, sans-serif",
-  padding: 30,
+  padding: '1.5rem',
   backgroundColor: 'rgba(255, 255, 255, 0.95)',
-  borderRadius: 16,
+  borderRadius: '1rem',
   boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
-  backdropFilter: 'blur(12px)', // frosted glass effect
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)', // for Safari
   border: '1px solid rgba(255, 255, 255, 0.3)',
   position: 'relative',
   zIndex: 1,
+  boxSizing: 'border-box',
 };
 
+
 const titleStyle = {
-  fontSize: '3.5rem',
+  fontSize: 'clamp(2rem, 6vw, 3.2rem)', // Responsive font size
   fontWeight: '900',
   textAlign: 'center',
   color: '#d32f2f',
-  marginBottom: '0.1rem', // Reduced from '0.25rem'
+  marginBottom: '0.5rem',
   textTransform: 'uppercase',
-  letterSpacing: '0.15em',
+  letterSpacing: '0.12em',
   textShadow: `
     1px 1px 0 #b71c1c,
     2px 2px 0 #a31818,
@@ -376,66 +380,68 @@ const titleStyle = {
   `,
   userSelect: 'none',
   cursor: 'default',
-  lineHeight: 1.1,
+  lineHeight: 1.2,
 };
 
-
 const subTitleStyle = {
-  fontSize: '1.2rem',
-  fontWeight: '700',
-  marginBottom: 20,
+  fontSize: 'clamp(1rem, 4.5vw, 1.4rem)', // Also responsive
+  fontWeight: '600',
+  marginBottom: '1.2rem',
   textAlign: 'center',
   textTransform: 'capitalize',
   color: '#d32f2f',
   fontVariantCaps: 'small-caps',
+  paddingLeft: '0.5rem',
+  paddingRight: '0.5rem',
 };
 
 const formStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 15,
+  gap: '1rem',
+  padding: '0 0.5rem',
+  width: '100%',
 };
 
 const inputStyle = {
-  border: '2.5px solid #ddd',
-  borderRadius: 10,
-  padding: '0.7rem 1.3rem',
-  fontSize: '1.05rem',
+  width: '100%',
+  padding: '0.75rem 1rem',
+  fontSize: 'clamp(0.95rem, 4vw, 1.05rem)',
   fontWeight: '500',
   fontFamily: "'Poppins', Arial, sans-serif",
-  transition: 'border-color 0.3s ease',
-  boxShadow: '0 0 4px transparent',
+  border: '2px solid #ddd',
+  borderRadius: '10px',
   outline: 'none',
   color: '#333',
-  width: '100%',
-  cursor: 'text',
+  transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+  boxShadow: '0 0 0 rgba(0,0,0,0)',
 };
 
 const selectStyle = {
   ...inputStyle,
   appearance: 'none',
-  backgroundColor: 'white',
+  backgroundColor: '#fff',
   cursor: 'pointer',
 };
 
 const textareaStyle = {
   ...inputStyle,
-  minHeight: 110,
+  minHeight: 120,
   resize: 'vertical',
   fontWeight: '600',
 };
 
 const checkboxLabelStyle = {
-  fontWeight: '600',
-  fontSize: '0.9rem',
-  userSelect: 'none',
-  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
-  gap: 10,
+  gap: '0.6rem',
   color: '#444',
-  marginTop: 5,
-  marginBottom: 5,
+  fontWeight: '600',
+  fontSize: 'clamp(0.85rem, 3.5vw, 1rem)',
+  userSelect: 'none',
+  cursor: 'pointer',
+  marginTop: '0.3rem',
+  marginBottom: '0.5rem',
 };
 
 const checkboxStyle = {
@@ -443,23 +449,27 @@ const checkboxStyle = {
   height: 18,
   cursor: 'pointer',
   borderRadius: 4,
-  border: '2.5px solid #d32f2f',
+  border: '2px solid #d32f2f',
 };
 
 const buttonsWrapperStyle = {
   display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 12,
+  flexDirection: 'column',
+  gap: '0.8rem',
+  marginTop: '1rem',
+  width: '100%',
 };
 
 const buttonStyle = {
-  cursor: 'pointer',
-  borderRadius: 9,
-  border: 'none',
-  padding: '0.7rem 1.6rem',
+  width: '100%',
+  padding: '0.75rem',
+  fontSize: 'clamp(1rem, 4vw, 1.1rem)',
   fontWeight: '700',
-  fontSize: '1.15rem',
-  color: 'white',
+  color: '#fff',
+  backgroundColor: '#d32f2f',
+  border: 'none',
+  borderRadius: '10px',
+  cursor: 'pointer',
   transition: 'background-color 0.3s ease',
   boxShadow: '0 3px 10px rgba(211, 47, 47, 0.7)',
 };
@@ -467,8 +477,7 @@ const buttonStyle = {
 const reportButtonStyle = {
   ...buttonStyle,
   backgroundColor: '#ff3b3b',
-  boxShadow: '0 3px 15px rgba(255, 59, 59, 0.9)',
-  fontSize: '1rem',
+  boxShadow: '0 4px 12px rgba(255, 59, 59, 0.9)',
 };
 
 const toastStyle = {
@@ -485,6 +494,7 @@ const progressStyle = {
   background: '#ff6a00',
   borderRadius: '10px',
 };
+
 
 // Export the component
 export default FeedbackForm;
