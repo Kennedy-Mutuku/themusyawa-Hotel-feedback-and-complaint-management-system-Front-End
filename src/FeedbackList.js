@@ -142,28 +142,58 @@ function FeedbackList() {
         <p style={emptyStyle}>No matching feedback found.</p>
       ) : (
         <ul style={listStyle}>
-  {filteredFeedbacks.map(({ _id, name, email, category, message, feedbackText, submittedAt, anonymous, fileUrl }) => (
-    <li key={_id} style={itemStyle}>
-      <div style={categoryStyle}>{category}</div>
-      <p style={messageStyle}>"{message || feedbackText}"</p>
-      <p style={infoStyle}>
-        <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
-        <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
-        <strong>Date:</strong> {submittedAt ? new Date(submittedAt).toLocaleString() : 'N/A'}
-      </p>
-      {fileUrl && (
-        <div style={{ marginTop: '10px' }}>
-          <strong>Attachment:</strong><br />
-          <img
-            src={fileUrl}
-            alt="Uploaded file"
-            style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '6px' }}
-          />
-        </div>
-      )}
-      <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
-    </li>
-  ))}
+  {filteredFeedbacks.map(({ _id, name, email, category, message, feedbackText, submittedAt, anonymous, fileUrl }) => {
+    const formattedDate = submittedAt
+      ? new Date(submittedAt).toLocaleString()
+      : 'N/A';
+
+    const isImage = fileUrl && /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fileUrl);
+    const fullFileUrl = fileUrl
+      ? fileUrl.startsWith('http')
+        ? fileUrl
+        : `${API_BASE_URL.replace(/\/+$/, '')}/${fileUrl.replace(/^\/+/, '')}`
+      : null;
+
+    return (
+      <li key={_id} style={itemStyle}>
+        <div style={categoryStyle}>{category}</div>
+        <p style={messageStyle}>"{message || feedbackText}"</p>
+        <p style={infoStyle}>
+          <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
+          <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
+          <strong>Date:</strong> {formattedDate}
+        </p>
+        {fileUrl && (
+          <div style={{ marginTop: '10px' }}>
+            <strong>Attachment:</strong><br />
+            {isImage ? (
+              <img
+                src={fullFileUrl}
+                alt="attachment"
+                style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '6px' }}
+                onError={(e) => (e.target.style.display = 'none')}
+              />
+            ) : (
+              <a
+                href={fullFileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontSize: '1rem',
+                  color: '#007bff',
+                  textDecoration: 'underline',
+                  fontWeight: '600',
+                }}
+              >
+                📎 View Attached File
+              </a>
+            )}
+          </div>
+        )}
+        <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
+      </li>
+    );
+  })}
 </ul>
 
       )}
