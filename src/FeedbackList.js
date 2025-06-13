@@ -149,7 +149,8 @@ function FeedbackList() {
               <p style={infoStyle}>
                 <strong>Name:</strong> {anonymous ? 'Anonymous' : name} |{' '}
                 <strong>Email:</strong> {anonymous ? 'Hidden' : email || 'N/A'} |{' '}
-                <strong>Date:</strong> {new Date(date).toLocaleString()}
+                <strong>Date:</strong> {submittedAt ? new Date(submittedAt).toLocaleString() : 'N/A'}
+
               </p>
               {renderFileAttachment(fileUrl)}
               <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>
