@@ -16,6 +16,18 @@ function FeedbackList() {
     fetchFeedbacks();
   }, []);
 
+  const fetchFeedbacks = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/feedback`);
+      setFeedbacks(response.data);
+    } catch (err) {
+      setError('Failed to fetch feedback');
+      toast.error('Failed to fetch feedback');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const applyFilters = useCallback(() => {
     let result = [...feedbacks];
 
@@ -39,18 +51,6 @@ function FeedbackList() {
     applyFilters();
   }, [applyFilters]);
 
-  const fetchFeedbacks = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/api/feedback`);
-      setFeedbacks(response.data);
-    } catch (err) {
-      setError('Failed to fetch feedback');
-      toast.error('Failed to fetch feedback');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this feedback?')) return;
 
@@ -62,14 +62,17 @@ function FeedbackList() {
       toast.error('Failed to delete feedback');
     }
   };
-  
-    // Ensure the URL is absolute
+
+  // ✅ Moved this inside the component so it can access fileUrl safely
+  const renderFileAttachment = (fileUrl) => {
+    if (!fileUrl) return null;
+
     const fullFileUrl = fileUrl.startsWith('http')
       ? fileUrl
       : `${API_BASE_URL.replace(/\/+$/, '')}/${fileUrl.replace(/^\/+/, '')}`;
-  
+
     const isImage = /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(fullFileUrl);
-  
+
     return (
       <div style={fileContainerStyle}>
         {isImage ? (
@@ -104,7 +107,7 @@ function FeedbackList() {
       </div>
     );
   };
-  
+
   if (loading) return <p style={loadingStyle}>Loading feedback...</p>;
   if (error) return <p style={errorStyle}>{error}</p>;
 
@@ -149,7 +152,9 @@ function FeedbackList() {
                 <strong>Date:</strong> {new Date(date).toLocaleString()}
               </p>
               {renderFileAttachment(fileUrl)}
-              <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
+              <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>
+                Delete
+              </button>
             </li>
           ))}
         </ul>
@@ -157,9 +162,9 @@ function FeedbackList() {
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
+}
 
-
-// 🎨 Styling (unchanged)
+// 🔧 Styling
 const containerStyle = {
   maxWidth: 800,
   margin: '3rem auto',
