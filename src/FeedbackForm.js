@@ -75,7 +75,6 @@ function FeedbackForm({ defaultCategory = '' }) {
       toast.error('Please select a feedback category.');
       return;
     }
-
     if (!formData.feedbackText.trim()) {
       toast.error('Please enter your feedback.');
       return;
