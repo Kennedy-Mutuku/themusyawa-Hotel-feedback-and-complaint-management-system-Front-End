@@ -339,10 +339,14 @@ const pageBackgroundStyle = {
   minHeight: '100vh',
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',
+  alignItems: 'flex-start', // Move contents up
   background: 'radial-gradient(circle at center, #ff6a00 0%, #8b0000 85%)',
-  padding: '0', // ✅ Removes extra spacing
+  paddingTop: '1.2rem',     // Small spacing from top
+  paddingLeft: '0.4rem',
+  paddingRight: '0.4rem',
+  paddingBottom: '0.6rem',
 };
+
 
 
 
