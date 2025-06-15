@@ -364,27 +364,24 @@ const containerStyle = {
 };
 
 
-
 const titleStyle = {
-  fontSize: 'clamp(3.5rem, 9vw, 5rem)', // 👈 Increased size
+  fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', // Slightly reduced max
   fontWeight: '900',
   textAlign: 'center',
   color: '#d32f2f',
-  marginBottom: '0.8rem',
+  marginBottom: '0.5rem',
   textTransform: 'uppercase',
-  letterSpacing: '0.15em',
+  letterSpacing: '0.12em',
   textShadow: `
     1px 1px 0 #b71c1c,
     2px 2px 0 #a31818,
     3px 3px 0 #8c1414,
     4px 4px 0 #760f0f,
-    5px 5px 0 #5a0a0a,
-    6px 6px 0 #3f0808,
-    7px 7px 8px rgba(0, 0, 0, 0.5)
+    5px 5px 5px rgba(0, 0, 0, 0.35)
   `,
   userSelect: 'none',
   cursor: 'default',
-  lineHeight: 1.25,
+  lineHeight: 1.2,
 };
 
 
