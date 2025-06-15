@@ -46,42 +46,43 @@ function ReportCorruptionCTA() {
     </button>
   );
 }
-
 function App() {
   return (
     <Router>
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <h1>Feedback System</h1>
-        <nav style={{ marginBottom: '2rem' }}>
-          {/* Public navigation */}
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* Main content area */}
+        <div>
+          <ReportCorruptionCTA />
+
+          <Routes>
+            <Route path="/admin-login" element={<AdminLogin />} />
+
+            {/* Protected routes */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/feedback/view" element={<FeedbackList />} />
+            </Route>
+
+            <Route path="/feedback/submit" element={<FeedbackFormWrapper />} />
+
+            {/* Catch-all: redirect to submit feedback */}
+            <Route path="*" element={<FeedbackFormWrapper />} />
+          </Routes>
+        </div>
+
+        {/* Footer navigation */}
+        <nav style={{ padding: '1rem', textAlign: 'center', borderTop: '1px solid #ccc' }}>
           <Link to="/feedback/submit" style={{ marginRight: '20px' }}>
             Submit Feedback
           </Link>
-          <Link to="/admin-login" style={{ marginRight: '20px', color: 'red' }}>
+          <Link to="/admin-login" style={{ color: 'red' }}>
             Admin Login
           </Link>
         </nav>
-
-        <ReportCorruptionCTA />
-
-        <Routes>
-          <Route path="/admin-login" element={<AdminLogin />} />
-
-          {/* Protected routes */}
-          <Route element={<PrivateRoute />}>
-            {/* Nested protected route */}
-            <Route path="/feedback/view" element={<FeedbackList />} />
-          </Route>
-
-          <Route path="/feedback/submit" element={<FeedbackFormWrapper />} />
-
-          {/* Catch-all: redirect to submit feedback */}
-          <Route path="*" element={<FeedbackFormWrapper />} />
-        </Routes>
       </div>
     </Router>
   );
 }
+
 
 // Wrapper to pass defaultCategory prop from navigation state to FeedbackForm
 function FeedbackFormWrapper() {
