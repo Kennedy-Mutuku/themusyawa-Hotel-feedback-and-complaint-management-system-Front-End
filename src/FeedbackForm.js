@@ -335,20 +335,21 @@ function FeedbackForm({ defaultCategory = '' }) {
 
 // ---- STYLES ----
 
-// Add this block before any style declarations
 const pageBackgroundStyle = {
   minHeight: '100vh',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  background: 'radial-gradient(circle at center, #ff6a00 0%, #8b0000 80%)',
-  padding: '0.5rem', // reduced to bring white box closer to edge
+  background: 'radial-gradient(circle at center, #ff6a00 0%, #8b0000 85%)',
+  padding: '0', // ✅ Removes extra spacing
 };
 
 
+
 const containerStyle = {
-  width: '95%',
-  maxWidth: '580px',
+  width: '98%',          // ✅ Slightly wider
+  maxWidth: '720px',     // ✅ Increase max width
+  padding: '2.5rem',     // ✅ More inner space
   margin: '1.5rem auto',
   fontFamily: "'Poppins', Arial, sans-serif",
   padding: '2rem',
