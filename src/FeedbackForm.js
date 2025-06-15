@@ -364,8 +364,9 @@ const containerStyle = {
 };
 
 
+
 const titleStyle = {
-  fontSize: 'clamp(1.8rem, 5.5vw, 2.8rem)', // Slightly reduced max
+  fontSize: 'clamp(2rem, 6vw, 3.2rem)', // Responsive font size
   fontWeight: '900',
   textAlign: 'center',
   color: '#d32f2f',
@@ -377,13 +378,12 @@ const titleStyle = {
     2px 2px 0 #a31818,
     3px 3px 0 #8c1414,
     4px 4px 0 #760f0f,
-    5px 5px 5px rgba(0, 0, 0, 0.35)
+    5px 5px 6px rgba(0, 0, 0, 0.4)
   `,
   userSelect: 'none',
   cursor: 'default',
   lineHeight: 1.2,
 };
-
 
 const subTitleStyle = {
   fontSize: 'clamp(1rem, 4.5vw, 1.4rem)', // Also responsive
