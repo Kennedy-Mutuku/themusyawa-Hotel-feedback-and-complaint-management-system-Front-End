@@ -348,9 +348,9 @@ const pageBackgroundStyle = {
 
 const containerStyle = {
   width: '96%',          // ✅ Slightly wider
-  maxWidth: '700px',     // ✅ Increase max width
+  maxWidth: '710px',     // ✅ Increase max width
   padding: '2.5rem',     // ✅ More inner space
-  margin: '1.5rem auto',
+  margin: '1.4rem auto',
   fontFamily: "'Poppins', Arial, sans-serif",
   backgroundColor: 'rgba(255, 255, 255, 0.97)',
   borderRadius: '1rem',
