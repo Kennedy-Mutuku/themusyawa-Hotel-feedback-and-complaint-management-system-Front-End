@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from './config';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function FeedbackList() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -19,9 +21,7 @@ function FeedbackList() {
   const fetchFeedbacks = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/feedback`);
-      const sortedFeedbacks = [...response.data].sort((a, b) => {
-        return new Date(b.submittedAt) - new Date(a.submittedAt);
-      });
+      const sortedFeedbacks = [...response.data].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
       setFeedbacks(sortedFeedbacks);
     } catch (err) {
       setError('Failed to fetch feedback');
@@ -33,11 +33,9 @@ function FeedbackList() {
 
   const applyFilters = useCallback(() => {
     let result = [...feedbacks];
-
     if (categoryFilter !== 'All') {
       result = result.filter((fb) => fb.category === categoryFilter);
     }
-
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -46,7 +44,6 @@ function FeedbackList() {
           fb.name?.toLowerCase().includes(q)
       );
     }
-
     setFilteredFeedbacks(result);
   }, [feedbacks, categoryFilter, searchQuery]);
 
@@ -63,6 +60,18 @@ function FeedbackList() {
     } catch (err) {
       toast.error('Failed to delete feedback');
     }
+  };
+
+  const downloadAsPDF = async (id) => {
+    const element = document.getElementById(`feedback-${id}`);
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF();
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`feedback-${id}.pdf`);
   };
 
   if (loading) return <p style={loadingStyle}>Loading feedback...</p>;
@@ -113,7 +122,7 @@ function FeedbackList() {
               : null;
 
             return (
-              <li key={_id} style={itemStyle}>
+              <li key={_id} style={itemStyle} id={`feedback-${_id}`}>
                 <div style={categoryStyle}>{category}</div>
                 <p style={messageStyle}>"{message || feedbackText}"</p>
                 <p style={infoStyle}>
@@ -150,7 +159,14 @@ function FeedbackList() {
                   </div>
                 )}
 
-                <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>Delete</button>
+                <div style={buttonRowStyle}>
+                  <button style={downloadButtonStyle} onClick={() => downloadAsPDF(_id)}>
+                    Download PDF
+                  </button>
+                  <button style={deleteButtonStyle} onClick={() => handleDelete(_id)}>
+                    Delete
+                  </button>
+                </div>
               </li>
             );
           })}
@@ -161,11 +177,10 @@ function FeedbackList() {
   );
 }
 
-// Styling
+// --- Styling ---
 const containerStyle = {
-  maxWidth: 800,
-  margin: '3rem auto',
-  padding: '30px 40px',
+  maxWidth: '100%',
+  padding: '20px',
   backgroundColor: '#ffffff',
   borderRadius: 15,
   boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
@@ -176,18 +191,18 @@ const headerStyle = {
   marginBottom: 25,
   textAlign: 'center',
   fontWeight: '700',
-  fontSize: '2rem',
+  fontSize: '1.8rem',
 };
 
 const filterContainerStyle = {
   display: 'flex',
-  justifyContent: 'space-between',
-  marginBottom: 20,
+  flexDirection: 'column',
   gap: '10px',
+  marginBottom: 20,
 };
 
 const inputStyle = {
-  flex: 2,
+  width: '100%',
   padding: '10px',
   fontSize: '1rem',
   borderRadius: 8,
@@ -195,7 +210,7 @@ const inputStyle = {
 };
 
 const selectStyle = {
-  flex: 1,
+  width: '100%',
   padding: '10px',
   fontSize: '1rem',
   borderRadius: 8,
@@ -211,52 +226,66 @@ const listStyle = {
 const itemStyle = {
   backgroundColor: '#f9faff',
   borderRadius: 12,
-  padding: '20px 25px',
+  padding: '15px 20px',
   marginBottom: 18,
   boxShadow: '0 3px 10px rgba(0,0,0,0.05)',
-  position: 'relative',
 };
 
 const categoryStyle = {
   display: 'inline-block',
   backgroundColor: '#007bff',
   color: '#fff',
-  padding: '4px 12px',
+  padding: '4px 10px',
   borderRadius: '20px',
   fontWeight: '600',
-  fontSize: '0.9rem',
-  marginBottom: 12,
-};
-
-const messageStyle = {
-  fontSize: '1.1rem',
-  fontStyle: 'italic',
-  color: '#333',
+  fontSize: '0.85rem',
   marginBottom: 10,
 };
 
+const messageStyle = {
+  fontSize: '1rem',
+  fontStyle: 'italic',
+  color: '#333',
+  marginBottom: 8,
+};
+
 const infoStyle = {
-  fontSize: '0.85rem',
+  fontSize: '0.8rem',
   color: '#666',
-  marginBottom: 12,
+  marginBottom: 10,
 };
 
 const deleteButtonStyle = {
   backgroundColor: '#dc3545',
   color: '#fff',
   border: 'none',
-  padding: '8px 15px',
+  padding: '6px 12px',
   borderRadius: 8,
   cursor: 'pointer',
   fontWeight: '600',
-  position: 'absolute',
-  right: 20,
-  bottom: 20,
+};
+
+const downloadButtonStyle = {
+  backgroundColor: '#28a745',
+  color: '#fff',
+  border: 'none',
+  padding: '6px 12px',
+  borderRadius: 8,
+  cursor: 'pointer',
+  fontWeight: '600',
+  marginRight: '10px',
+};
+
+const buttonRowStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '10px',
+  marginTop: '12px',
 };
 
 const loadingStyle = {
   textAlign: 'center',
-  fontSize: '1.2rem',
+  fontSize: '1.1rem',
   marginTop: '3rem',
   color: '#555',
 };
