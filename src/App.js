@@ -59,26 +59,24 @@ function App() {
     <Router>
       <div
         style={{
-          backgroundColor: '#dc2626',
-          padding: '4px', // thin red border
+          backgroundColor: '#dc2626', // thin red edge
+          padding: '2px',
           minHeight: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          boxSizing: 'border-box',
         }}
       >
         <div
           style={{
             backgroundColor: 'white',
             borderRadius: '1rem',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-            padding: '1.5rem',
-            maxWidth: '640px',
+            maxWidth: '100%',
             width: '100%',
-            minHeight: 'calc(100vh - 8px)',
+            minHeight: '100vh',
+            padding: '1.25rem 1rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            boxSizing: 'border-box',
           }}
         >
           <div style={{ flex: 1 }}>
