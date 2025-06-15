@@ -347,12 +347,11 @@ const pageBackgroundStyle = {
 
 
 const containerStyle = {
-  width: '98%',          // ✅ Slightly wider
-  maxWidth: '720px',     // ✅ Increase max width
+  width: '96%',          // ✅ Slightly wider
+  maxWidth: '700px',     // ✅ Increase max width
   padding: '2.5rem',     // ✅ More inner space
   margin: '1.5rem auto',
   fontFamily: "'Poppins', Arial, sans-serif",
-  padding: '2rem',
   backgroundColor: 'rgba(255, 255, 255, 0.97)',
   borderRadius: '1rem',
   boxShadow: '0 6px 18px rgba(0, 0, 0, 0.1)', // softer shadow
