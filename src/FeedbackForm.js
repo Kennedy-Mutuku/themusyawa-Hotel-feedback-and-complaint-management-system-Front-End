@@ -390,7 +390,7 @@ const titleStyle = {
 };
 
 const subTitleStyle = {
-  fontSize: 'clamp(1rem, 4.5vw, 1.4rem)', // Also responsive
+  fontSize: 'clamp(1rem, 4.5vw, 1.4rem)', 
   fontWeight: '600',
   marginBottom: '1.2rem',
   textAlign: 'center',
@@ -404,7 +404,7 @@ const subTitleStyle = {
 const formStyle = {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center', // Center everything horizontally
+  alignItems: 'center', 
   gap: 15,
 };
 

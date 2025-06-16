@@ -13,7 +13,7 @@ import FeedbackForm from './FeedbackForm';
 import AdminLogin from './components/AdminLogin';
 import PrivateRoute from './components/PrivateRoute';
 
-// Floating Report Corruption Button
+
 function ReportCorruptionCTA() {
   const navigate = useNavigate();
 
@@ -47,7 +47,6 @@ function ReportCorruptionCTA() {
   );
 }
 
-// Wrapper to handle state-passed category
 function FeedbackFormWrapper() {
   const location = useLocation();
   const defaultCategory = location.state?.defaultCategory || '';
@@ -59,7 +58,7 @@ function App() {
     <Router>
       <div
         style={{
-          backgroundColor: '#dc2626', // thin red edge
+          backgroundColor: '#dc2626', 
           padding: '2px',
           minHeight: '100vh',
           boxSizing: 'border-box',
