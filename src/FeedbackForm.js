@@ -141,7 +141,7 @@ function FeedbackForm({ defaultCategory = '' }) {
     <>
       <div style={pageBackgroundStyle}>
         <div style={containerStyle}>
-          <h1 style={titleStyle}>MACHAKOS LEVEL 5 HOSPITAL</h1>
+          <h1 style={titleStyle}>THE MUSYAWA HOTEL</h1>
           <h2
             style={subTitleStyle}
             className="animated-subtitle"
