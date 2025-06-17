@@ -233,34 +233,39 @@ function FeedbackForm({ defaultCategory = '' }) {
               ref={fileInputRef}
             />
 
-            <div style={buttonsWrapperStyle}>
-              <button
-                type="button"
-                onClick={handleReportClick}
-                style={{
-                  ...reportButtonStyle,
-                  backgroundColor: reportHover ? '#d32f2f' : '#ff3b3b',
-                }}
-                onMouseEnter={() => setReportHover(true)}
-                onMouseLeave={() => setReportHover(false)}
-              >
-                🚨 Report Corruption
-              </button>
+<div style={buttonsWrapperStyle}>
+<button
+  type="submit"
+  style={{
+    ...buttonStyle,
+    backgroundColor: btnHover ? '#ff6a00' : '#d32f2f',
+    opacity: isSubmitting ? 0.6 : 1,
+    padding: '0.8rem 2rem',         // ⬅️ Bigger padding
+    fontSize: '1.15rem',            // ⬅️ Bigger text
+    borderRadius: '12px',           // ⬅️ Softer roundness
+  }}
+  onMouseEnter={() => setBtnHover(true)}
+  onMouseLeave={() => setBtnHover(false)}
+  disabled={isSubmitting}
+>
+  {isSubmitting ? '⏳ Submitting...' : '🚀 Submit'}
+</button>
 
-              <button
-                type="submit"
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: btnHover ? '#ff6a00' : '#d32f2f',
-                  opacity: isSubmitting ? 0.6 : 1,
-                }}
-                onMouseEnter={() => setBtnHover(true)}
-                onMouseLeave={() => setBtnHover(false)}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? '⏳ Submitting...' : '🚀 Submit'}
-              </button>
-            </div>
+
+  <button
+    type="button"
+    onClick={handleReportClick}
+    style={{
+      ...reportButtonStyle,
+      backgroundColor: reportHover ? '#d32f2f' : '#ff3b3b',
+    }}
+    onMouseEnter={() => setReportHover(true)}
+    onMouseLeave={() => setReportHover(false)}
+  >
+    🚨 Report Corruption
+  </button>
+</div>
+
           </form>
 
           <ToastContainer
